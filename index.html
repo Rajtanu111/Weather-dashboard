@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyCast Pro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <section class="dashboard">
+      <header class="hero">
+        <div>
+          <p class="hero-label">INTELLIGENT WEATHER DASHBOARD</p>
+          <h1>SkyCast Pro</h1>
+          <p class="hero-subtext">Real-time weather, air quality, forecast trends, and smart city insights.</p>
+        </div>
+
+        <div class="header-actions">
+          <button id="unitToggle" class="icon-btn" type="button" title="Toggle unit">°F</button>
+          <button id="themeToggle" class="icon-btn" type="button" title="Toggle theme">🌙</button>
+        </div>
+      </header>
+
+      <section class="search-panel">
+        <div class="search-row">
+          <div class="search-wrapper">
+            <input
+              type="text"
+              id="cityInput"
+              placeholder="Search city..."
+              autocomplete="off"
+            />
+            <div id="suggestions" class="suggestions"></div>
+          </div>
+
+          <button id="searchBtn" class="primary-btn">Search</button>
+          <button id="locationBtn" class="secondary-btn">Use Location</button>
+        </div>
+
+        <p id="loading" class="status-text"></p>
+        <p id="errorMsg" class="error-text"></p>
+      </section>
+
+      <section id="skeleton" class="skeleton-layout hidden">
+        <div class="skeleton-card skeleton-tall"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card skeleton-wide"></div>
+      </section>
+
+      <section id="mainWeatherSection" class="main-layout">
+        <article class="card hero-weather-card">
+          <div class="weather-top">
+            <div>
+              <p class="card-label">Current Weather</p>
+              <h2 id="cityName">Bhubaneswar, IN</h2>
+              <p id="dateTime" class="muted-text">--</p>
+            </div>
+
+            <div class="weather-icon-box">
+              <img id="weatherIcon" src="" alt="Weather icon" />
+            </div>
+          </div>
+
+          <div class="temp-strip">
+            <h3 id="temperature">--°C</h3>
+            <span id="conditionBadge" class="pill">--</span>
+          </div>
+
+          <p id="description" class="description-text">Condition: --</p>
+          <p id="weatherTip" class="tip-box">Weather tip will appear here.</p>
+
+          <div class="metric-grid">
+            <div class="mini-card">
+              <span>🌡 Feels Like</span>
+              <strong id="feelsLike">--°C</strong>
+            </div>
+            <div class="mini-card">
+              <span>💧 Humidity</span>
+              <strong id="humidity">--%</strong>
+            </div>
+            <div class="mini-card">
+              <span>🌬 Wind</span>
+              <strong id="wind">-- m/s</strong>
+            </div>
+            <div class="mini-card">
+              <span>🧭 Pressure</span>
+              <strong id="pressure">-- hPa</strong>
+            </div>
+          </div>
+        </article>
+
+        <aside class="side-stack">
+          <article class="card compact-card">
+            <div class="section-head">
+              <h3>Air Quality</h3>
+              <span id="aqiLabel" class="pill">--</span>
+            </div>
+
+            <div class="aqi-main">
+              <p>AQI Index</p>
+              <h2 id="aqiValue">--</h2>
+            </div>
+
+            <div class="aqi-grid">
+              <div class="mini-stat">
+                <span>PM2.5</span>
+                <strong id="pm25">--</strong>
+              </div>
+              <div class="mini-stat">
+                <span>PM10</span>
+                <strong id="pm10">--</strong>
+              </div>
+              <div class="mini-stat">
+                <span>CO</span>
+                <strong id="co">--</strong>
+              </div>
+              <div class="mini-stat">
+                <span>NO₂</span>
+                <strong id="no2">--</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="card compact-card">
+            <div class="section-head">
+              <h3>Sun Cycle</h3>
+            </div>
+
+            <div class="sun-grid">
+              <div class="mini-card">
+                <span>🌅 Sunrise</span>
+                <strong id="sunrise">--</strong>
+              </div>
+              <div class="mini-card">
+                <span>🌇 Sunset</span>
+                <strong id="sunset">--</strong>
+              </div>
+            </div>
+          </article>
+        </aside>
+      </section>
+
+      <section id="extraGridSection" class="extras-layout">
+        <article class="card">
+          <div class="section-head">
+            <h3>Recent Searches</h3>
+            <span class="muted-text small-note">Click to search again</span>
+          </div>
+          <div id="historyList" class="chip-wrap"></div>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <h3>Favorites</h3>
+            <span class="muted-text small-note">Double-click recent city to add</span>
+          </div>
+          <div id="favoritesList" class="chip-wrap"></div>
+        </article>
+      </section>
+
+      <section id="forecastSection" class="card">
+        <div class="section-head">
+          <div>
+            <h3>5-Day Forecast</h3>
+            <p class="muted-text">Daily weather snapshot near midday</p>
+          </div>
+        </div>
+
+        <div id="forecastContainer" class="forecast-grid"></div>
+      </section>
+
+      <section id="hourlySection" class="card">
+        <div class="section-head">
+          <div>
+            <h3>Hourly Trend</h3>
+            <p class="muted-text">Next hours temperature overview</p>
+          </div>
+        </div>
+
+        <div class="chart-area">
+          <canvas id="hourlyChart"></canvas>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
